@@ -3,18 +3,19 @@ import path from "path";
 import { fileURLToPath } from "url";
 import fs from "fs";
 
-// Get correct directory
+// Get correct directory path
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
-// Use persistent storage directory on Render
-const dbPath = process.env.RENDER ? "/var/data/notes.db" : path.join(__dirname, "database", "notes.db");
+// ✅ Define database directory and path
+const dbDir = path.join(__dirname, "data"); // Ensure "data" folder exists
+const dbPath = path.join(dbDir, "notes.db");
 
-// Ensure the database directory exists (for local development)
-if (!fs.existsSync(path.dirname(dbPath))) {
-  fs.mkdirSync(path.dirname(dbPath), { recursive: true });
+// ✅ Ensure the directory exists
+if (!fs.existsSync(dbDir)) {
+  fs.mkdirSync(dbDir, { recursive: true });
 }
 
-// Initialize database
+// ✅ Initialize the database
 const db = new Database(dbPath);
 
 // Create table if not exists
